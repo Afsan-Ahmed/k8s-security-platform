@@ -1,0 +1,26 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mysql-database
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: mysql-database
+      match:
+        any:
+         - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - private
+              selector:
+                matchLabels:
+                   app: database
+
+      validate:
+        message: "mysql Database should be in Private namespace"
+        pattern:
+          spec:
+            containers:
+               - SecurityContext:
+                   runAsNonRoot: true

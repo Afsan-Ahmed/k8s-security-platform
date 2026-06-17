@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: frontend-tag
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: frontend-tag
+      match:
+        any:
+         - resources: 
+             kinds:
+               - Pod
+
+      validate:
+        message: "Frontend Must not Use Latest Tag"
+        pattern:
+          spec:
+            containers:
+               image: "!*:latest"

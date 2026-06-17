@@ -1,0 +1,19 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: registery
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: registery
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: "Get images only from this registry"
+        pattern:
+          spec:
+            containers:
+              - image: "342934375778.dkr.ecr.ap-northeast-2.amazonaws.com/*"

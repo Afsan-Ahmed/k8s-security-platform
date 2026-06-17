@@ -1,0 +1,27 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mongo-database
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: mongo-database
+      match:
+        any:
+         - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - private
+              selector:
+                matchLabels:
+                   app: database
+
+      validate:
+        message: "mongaDB should be in Private namespace"
+        pattern:
+          spec:
+            containers:
+               - SecurityContext:
+                   runAsNonRoot: true
+                     

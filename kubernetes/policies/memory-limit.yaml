@@ -1,0 +1,21 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: memory-one
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: Memory-One
+      match:
+        any:
+         - resources:
+             kinds:
+               - Pod
+      validate:
+        message: "Should have some Memory Limit"
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  limits:
+                    memory: "?*"

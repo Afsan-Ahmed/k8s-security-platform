@@ -1,0 +1,24 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: api-resourcelimit
+spec:
+  validationFailureAction: Enforce
+  rules: 
+    - name: api-resourcelimit
+      match:
+        any:
+         - resources: 
+             kinds:
+               - Pod
+   
+      validate:
+         message: "Api should have resource allocated"
+         pattern:
+           spec: 
+             containers:
+               - resources:
+                  limits:
+                    memory: "?*"
+                    cpu: "?*"
+

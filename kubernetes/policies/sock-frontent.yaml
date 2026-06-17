@@ -1,0 +1,21 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata: 
+  name: frontend-noroot
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: root-not-frontend
+      match:
+        any:
+         - resources:
+              kinds:
+                - Pod
+
+      validate:
+        message: "Frontend must not Contain root Access!"
+        pattern:
+          spec:
+            containers:
+              - SecurityContext: 
+                   runAsNonRoot: true

@@ -1,0 +1,21 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: cpu-one
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: cpu-one
+      match:
+        any:
+         - resources:
+             kinds:
+               - Pod
+      validate:
+        message: "Should have some CPU Limits"
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  limits:
+                    cpu: "?*"
