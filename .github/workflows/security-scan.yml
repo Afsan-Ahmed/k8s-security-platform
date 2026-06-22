@@ -77,3 +77,16 @@ jobs:
         run: |
           kyverno apply kubernetes/policies/*.yaml \
           --resource kubernetes/resources/bad-deployment.yaml
+
+      - name: Generate SARIF Report
+        uses: aquasecurity/trivy-action@master 
+        with: 
+          image-ref: "342934375778.dkr.ecr.ap-northeast-2.amazonaws.com/namespace/security-platform:latest" 
+          format: "sarif" 
+          output: "trivy-results.sarif" 
+          exit-code: "0"
+
+      - name: Upload SARIF Report 
+        uses: github/codeql-action/upload-sarif@v4 
+        with: 
+          sarif_file: trivy-results.sarif
