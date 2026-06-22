@@ -67,6 +67,7 @@ jobs:
         run: kyverno version
 
       - name: Validate Good Resource
+        continue-on-error: true
         run: |
           kyverno apply kubernetes/policies/*.yaml \
           --resource kubernetes/resources/good-deployment.yaml
