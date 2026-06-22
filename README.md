@@ -196,7 +196,7 @@ Monitors:
 
 ## Kyverno Policy Validation in GitHub Actions
 
-![Kyverno](images/kyvernopolicyworking in github.png)
+![Kyverno](images/kyvernopolicyworkingingithub.png)
 
 ---
 
