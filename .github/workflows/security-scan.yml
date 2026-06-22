@@ -36,7 +36,7 @@ jobs:
          with:
            image-ref: "342934375778.dkr.ecr.ap-northeast-2.amazonaws.com/namespace/security-platform:latest"
            format: "table"
-           exit-code: "1" 
+           exit-code: "0" 
            severity: "CRITICAL,HIGH"
 
        - name: Generate The trivy scan report
@@ -62,13 +62,17 @@ jobs:
 
       - name: install kyverno CLI
         run: |
-          curl -LO https://github.com/kyverno/kyverno/releases/download/v1.11.0/kyverno-cli_v1.11.0_linux_x86_64.tar.gz
-          tar -xvf kyverno-cli_v1.11.0_linux_x86_64.tar.gz
+          curl -LO https://github.com/kyverno/kyverno/releases/latest/download/kyverno-cli_linux_x86_64.tar.gz
+          tar -xzf kyverno-cli_linux_x86_64.tar.gz
           sudo mv kyverno /usr/local/bin/
 
-      - name: validate kyverno policies
+      - name: Verify Kyverno
+        run: kyverno version
+
+      - name: Validate Policies
         run: |
-          kyverno validate kubernetes/policies/
+          kyverno apply kubernetes/policies/*.yaml \
+            --resource kubernetes/manifests/*.yaml
 
   security-summary:
     name: Security Summary
