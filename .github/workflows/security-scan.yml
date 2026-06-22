@@ -61,18 +61,14 @@ jobs:
         uses: actions/checkout@v3 
 
       - name: install kyverno CLI
-        run: |
-          curl -LO https://github.com/kyverno/kyverno/releases/latest/download/kyverno-cli_linux_x86_64.tar.gz
-          tar -xzf kyverno-cli_linux_x86_64.tar.gz
-          sudo mv kyverno /usr/local/bin/
+        uses: kyverno/action-install-cli@v0.2.0
 
-      - name: Verify Kyverno
+      - name: Check Version
         run: kyverno version
 
       - name: Validate Policies
         run: |
-          kyverno apply kubernetes/policies/*.yaml \
-            --resource kubernetes/manifests/*.yaml
+          kyverno apply kubernetes/policies/*.yaml
 
   security-summary:
     name: Security Summary
