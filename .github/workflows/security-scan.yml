@@ -11,6 +11,10 @@ jobs:
      name: Trivy scanner for Images
      runs-on: ubuntu-latest
 
+     permissions: 
+       contents: read 
+       security-events: write
+
    
      steps:
        - name: Checkout code
@@ -47,7 +51,7 @@ jobs:
            output: "trivy-results.sarif"
 
        - name: Upload SARIF Report 
-         uses: github/codeql-action/upload-sarif@v3 
+         uses: github/codeql-action/upload-sarif@v4
          with: 
            sarif_file: trivy-results.sarif
     
@@ -66,9 +70,18 @@ jobs:
       - name: Check Version
         run: kyverno version
 
-      - name: Validate Policies
+      - name: Test Passing Policy
         run: |
-          kyverno apply kubernetes/policies/*.yaml
+          echo "Testing compliant deployment"
+          kyverno apply kubernetes/policies/*.yaml \
+            --resource kubernetes/resources/good-deployment.yaml
+
+      - name: Test Failing Policy
+        continue-on-error: true
+        run: |
+          echo "Testing non-compliant deployment"
+          kyverno apply kubernetes/policies/*.yaml \
+            --resource kubernetes/resources/bad-deployment.yaml
 
   security-summary:
     name: Security Summary
