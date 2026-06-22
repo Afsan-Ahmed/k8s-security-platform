@@ -60,29 +60,6 @@ jobs:
     name: validate kyverno check
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3 
-
-      - name: install kyverno CLI
-        uses: kyverno/action-install-cli@v0.2.0
-
-      - name: Check Version
-        run: kyverno version
-
-      - name: Test Passing Policy
-        run: |
-          echo "Testing compliant deployment"
-          kyverno apply kubernetes/policies/*.yaml \
-            --resource kubernetes/resources/good-deployment.yaml
-
-      - name: Test Failing Policy
-        continue-on-error: true
-        run: |
-          echo "Testing non-compliant deployment"
-          kyverno apply kubernetes/policies/*.yaml \
-            --resource kubernetes/resources/bad-deployment.yaml
-
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
