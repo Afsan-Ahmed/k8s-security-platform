@@ -55,13 +55,6 @@ jobs:
          with: 
            sarif_file: trivy-results.sarif
     
-   
-  kyverno-policy-check:
-    name: validate kyverno check
-    runs-on: ubuntu-latest
-
-      - name: Skip Kyverno Validation
-        run: echo "Kyverno validation skipped"
 
   security-summary:
     name: Security Summary
